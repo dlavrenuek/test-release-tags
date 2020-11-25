@@ -1,0 +1,24 @@
+name: test release format v*
+
+on:
+  release:
+    types: [ released ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set release
+        run: echo "IAM_RELEASE=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Skip if tag does not match saas release format
+        run: |-
+          if ! [[ IAM_RELEASE =~ ^v[0-9]+$ ]]; then
+            exit 1;
+          fi
+
+      - uses: actions/checkout@v2
+
+      - name: Do something
+        run: echo "${IAM_RELEASE}"
