@@ -16,7 +16,7 @@ jobs:
       - name: Determinate if release matches SaaS format
         run: |-
           if [[ $IAM_RELEASE =~ ^v[0-9]+$ ]]; then
-            "::set-output name=result::true"
+            echo "::set-output name=result::true";
           fi
   publish:
     runs-on: ubuntu-latest
