@@ -8,13 +8,15 @@ jobs:
   publish:
     runs-on: ubuntu-latest
 
+    if: ${{ ${GITHUB_REF#refs/tags/} =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ }}
+
     steps:
       - name: Set release
         run: echo "IAM_RELEASE=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Skip if tag does not match on-prem release format
         run: |-
-          if ! [[ IAM_RELEASE =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if ! [[ $IAM_RELEASE =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             exit 1;
           fi
 
