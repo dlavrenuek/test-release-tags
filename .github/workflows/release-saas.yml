@@ -5,22 +5,22 @@ on:
     types: [ released ]
 
 jobs:
-  publish:
-    runs-on: ubuntu-latest
-
-    if: ${GITHUB_REF#refs/tags/} =~ ^v[0-9]+\.[0-9]+\.[0-9]+$
-
+  release-format:
+    outputs:
+      should-release: ${{ steps.should-release.outputs.result }}
     steps:
       - name: Set release
         run: echo "IAM_RELEASE=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
-      - name: Skip if tag does not match on-prem release format
+      - name: Determinate if release matches On-Prem format
         run: |-
-          if ! [[ $IAM_RELEASE =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            exit 1;
+          if [[ $IAM_RELEASE =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            "::set-output name=result::true"
           fi
-
-      - uses: actions/checkout@v2
-
+  publish:
+    runs-on: ubuntu-latest
+    needs: release-format
+    if: needs.release-format.output.should-release == 'true'
+    steps:
       - name: Do something
         run: echo "${IAM_RELEASE}"
