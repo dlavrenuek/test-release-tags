@@ -35,4 +35,4 @@ jobs:
     if: ${{ needs.release-format.outputs.result == 'true' }}
     steps:
       - name: Do something
-        run: echo "${IAM_RELEASE}"
+        run: echo "releasing"

@@ -16,7 +16,7 @@ jobs:
       - name: Determinate if release matches onprem format
         id: check-release-format
         run: |-
-          if [[ $IAM_RELEASE =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if [[ $IAM_RELEASE =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[A-Z]+){0,1}$ ]]; then
             echo "::set-output name=result::true";
           else
             echo "::set-output name=result::false";
@@ -35,4 +35,4 @@ jobs:
     if: ${{ needs.release-format.outputs.result == 'true' }}
     steps:
       - name: Do something
-        run: echo "${IAM_RELEASE}"
+          run: echo "releasing"
