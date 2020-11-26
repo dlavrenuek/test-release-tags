@@ -1,4 +1,4 @@
-name: test release format v*
+name: test release format v*.*.*
 
 on:
   release:
@@ -8,7 +8,7 @@ jobs:
   release-format:
     runs-on: ubuntu-latest
     outputs:
-      should-release: ${{ steps.should-release.outputs.result }}
+      result: ${{ steps.should-release.outputs.result }}
     steps:
       - name: Set release
         run: echo "IAM_RELEASE=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
@@ -18,10 +18,16 @@ jobs:
           if [[ $IAM_RELEASE =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "::set-output name=result::true";
           fi
+  print:
+    runs-on: ubuntu-latest
+    needs: release-format
+    steps:
+      print:
+        run: echo ${{ needs.release-format.outputs.result }}
   publish:
     runs-on: ubuntu-latest
     needs: release-format
-    if: needs.release-format.outputs.should-release == 'true'
+    if: ${{ needs.release-format.outputs.result }} == 'true'
     steps:
       - name: Do something
         run: echo "${IAM_RELEASE}"
