@@ -13,15 +13,15 @@ jobs:
       - name: Set release
         run: echo "IAM_RELEASE=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
-      - name: Determinate if release matches On-Prem format
+      - name: Determinate if release matches saas format
         run: |-
-          if [[ $IAM_RELEASE =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if [[ $IAM_RELEASE =~ ^v[0-9]+$ ]]; then
             echo "::set-output name=result::true";
           fi
   publish:
     runs-on: ubuntu-latest
     needs: release-format
-    if: needs.release-format.output.should-release == 'true'
+    if: needs.release-format.outputs.should-release == 'true'
     steps:
       - name: Do something
         run: echo "${IAM_RELEASE}"
