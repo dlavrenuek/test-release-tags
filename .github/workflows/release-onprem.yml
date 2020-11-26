@@ -8,12 +8,13 @@ jobs:
   release-format:
     runs-on: ubuntu-latest
     outputs:
-      result: ${{ steps.should-release.outputs.result }}
+      result: ${{ steps.check-release-format.outputs.result }}
     steps:
       - name: Set release
         run: echo "IAM_RELEASE=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Determinate if release matches onprem format
+        id: check-release-format
         run: |-
           if [[ $IAM_RELEASE =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "::set-output name=result::true";
