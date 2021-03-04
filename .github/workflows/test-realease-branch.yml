@@ -1,4 +1,4 @@
-name: test release format v*.*.*
+name: print release info
 
 on:
   release:
@@ -13,3 +13,6 @@ jobs:
 
       - name: print ref
         run: echo "${{ github.ref }}";
+
+      - name: print ref
+        run: echo "${{ toJson(github.event) }}";
