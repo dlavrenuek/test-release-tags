@@ -15,4 +15,15 @@ jobs:
         run: echo "${{ github.ref }}";
 
       - name: print ref
-        run: echo "${{ toJson(github.event) }}";
+        run: echo "${{ toJson(github.event.release) }}";
+
+      - name: Determine Docker Image Label
+        run: |-
+          if [[ "${{ github.event.release.target_commitish }}" =~ [0-9a-f]{40} ]]; then
+            run: echo "ON=${{ github.event.release.target_commitish }}" >> $GITHUB_ENV
+          else
+            run: echo "ON=master" >> $GITHUB_ENV
+          fi
+
+      - name: print ON
+        run: echo "$ON";
