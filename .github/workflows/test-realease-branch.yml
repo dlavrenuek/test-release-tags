@@ -15,4 +15,18 @@ jobs:
         run: echo "${{ github.ref }}";
 
       - name: print ref
-        run: echo "${{ toJson(github.event) }}";
+        run: echo "${{ toJson(github.event.release) }}";
+
+      - name: Determine Docker Image Label
+        run: |-
+          source = "${{ github.event.release.target_commitish }}"
+          if [[ $source =~ [0-9a-f]{40} ]] || [ $source == "master" ]; then
+            # on master if a commit sha or the master branch was picked
+            echo "ON=master" >> $GITHUB_ENV
+          else
+            # otherwise release is triggered from a branch
+            echo "ON=${{ github.event.release.target_commitish }}" >> $GITHUB_ENV
+          fi
+
+      - name: print ON
+        run: echo "$ON";
