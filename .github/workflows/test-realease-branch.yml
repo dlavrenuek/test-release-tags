@@ -19,13 +19,13 @@ jobs:
 
       - name: Determine Docker Image Label
         run: |-
-          source = "${{ github.event.release.target_commitish }}"
-          if [[ $source =~ [0-9a-f]{40} ]] || [ $source == "master" ]; then
+          releaseSource="${{ github.event.release.target_commitish }}"
+          if [[ $releaseSource =~ [0-9a-f]{40} ]] || [ $releaseSource == "master" ]; then
             # on master if a commit sha or the master branch was picked
             echo "ON=master" >> $GITHUB_ENV
           else
             # otherwise release is triggered from a branch
-            echo "ON=${{ github.event.release.target_commitish }}" >> $GITHUB_ENV
+            echo "ON=$releaseSource" >> $GITHUB_ENV
           fi
 
       - name: print ON
