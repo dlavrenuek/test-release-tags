@@ -3,19 +3,29 @@ name: Create a draft release
 on:
   workflow_dispatch:
     inputs:
-      name:
-        description: 'Commit to use'
-        required: true
+      commit:
+        description: 'Or enter a commit to use (HEAD of the selected branch if empty)'
+        required: false
         default: ''
 
 jobs:
   update_release_draft:
     runs-on: ubuntu-latest
     steps:
-      # Drafts your next Release notes as Pull Requests are merged into "master"
+      - name: Set commitish
+        id: set-commitish
+        run: |-
+          if [[ -z "${{ github.event.inputs.commit }}" ]]; then
+            # no commit is entered
+            echo "::set-output name=commitish::$GITHUB_SHA";
+          else
+            echo "::set-output name=commitish::${{ github.event.inputs.commit }}";
+          fi
+
       - uses: release-drafter/release-drafter@v5
         # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
         with:
           config-name: release-drafter-saas.yml
+          commitish: ${{ steps.set-commitish.outputs.commitish }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
