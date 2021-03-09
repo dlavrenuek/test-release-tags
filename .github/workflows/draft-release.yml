@@ -34,12 +34,6 @@ jobs:
           tag=$( git tag -l --merged master "v*.*.*" --sort=-committerdate | head -n 1 );
           echo "::set-output name=tag::$tag";
 
-      - name: Determinate latest released tag
-        id: latest-tag
-        run: |-
-          tag=$( git tag -l --merged master "v*.*.*" --sort=-committerdate | head -n 1 );
-          echo "::set-output name=tag::$tag";
-
       - name: Parse version
         id: parse-version
         run: |-
