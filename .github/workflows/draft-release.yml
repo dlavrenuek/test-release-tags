@@ -22,9 +22,36 @@ jobs:
             echo "::set-output name=commitish::${{ github.event.inputs.commit }}";
           fi
 
-      - uses: release-drafter/release-drafter@v5
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
-          config-name: release-drafter-onprem.yml
-          commitish: ${{ steps.set-commitish.outputs.commitish }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          ref: ${{ steps.set-commitish.outputs.commitish }}
+
+      - name: Determinate latest released tag
+        id: latest-tag
+        run: |-
+          tag=$( git tag -l --merged master "v*.*.*" --sort=-committerdate | head -n 1 );
+          echo "::set-output name=tag::$tag";
+
+      - name: Determinate latest released tag
+        id: latest-tag
+        run: |-
+          tag=$( git tag -l --merged master "v*.*.*" --sort=-committerdate | head -n 1 );
+          echo "::set-output name=tag::$tag";
+
+      - name: Parse version
+        id: parse-version
+        run: |-
+          [[ "${{ steps.latest-tag.outputs.tag }}" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)(-[A-Z0-9]+){0,1}$ ]]
+          MAJOR=BASH_REMATCH[0]
+          MINOR=BASH_REMATCH[1]
+          PATCH=BASH_REMATCH[2]
+          echo "$MAJOR - $MINOR - $PATCH"
+#
+#      - uses: release-drafter/release-drafter@v5
+#        with:
+#          config-name: release-drafter-onprem.yml
+#          commitish: ${{ steps.set-commitish.outputs.commitish }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
