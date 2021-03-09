@@ -31,7 +31,7 @@ jobs:
       - name: Determinate latest released tag
         id: latest-tag
         run: |-
-          tag=$( git tag -l --merged master "v*.*.*" --sort=-committerdate | head -n 1 );
+          tag=$( git tag -l --merged "${{ github.ref }}" "v*.*.*" --sort=-committerdate | head -n 1 );
           echo "::set-output name=tag::$tag";
 
       - name: Parse version
