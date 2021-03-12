@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: print ref
-        run: echo "${{ toJson(github.event.release) }}";
+        run: echo "${{ toJson(github.event.pull_request) }}";
 
       - uses: amannn/action-semantic-pull-request@v3.4.0
         env:
