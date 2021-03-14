@@ -53,13 +53,13 @@ jobs:
         if: false
         uses: octokit/request-action@v2.x
         id: commit-history
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           route: POST /repos/:repository/issues/:issue_number/comments
           repository: ${{ github.repository }}
           issue_number: ${{ github.event.number }}
           body: A test comment
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 #
 #      - uses: release-drafter/release-drafter@v5
