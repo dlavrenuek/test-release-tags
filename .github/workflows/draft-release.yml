@@ -13,9 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: print info
-        run: echo "${{ toJson(github.event.workflow_dispatch) }}";
-
       - name: Set commitish
         id: set-commitish
         run: |-
@@ -50,17 +47,27 @@ jobs:
           echo "::set-output name=patch::${BASH_REMATCH[3]}";
 
       - name: Retrieve commit history
-        if: false
         uses: octokit/request-action@v2.x
         id: commit-history
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          route: POST /repos/:repository/issues/:issue_number/comments
+          route: GET /repos/:repository/commits
           repository: ${{ github.repository }}
-          issue_number: ${{ github.event.number }}
-          body: A test comment
+          sha: ${{ steps.current-tag.outputs.tag }}
+          per_page: 500
 
+      - name: Generate changelog
+        uses: actions/changelog-generator@v1.1.3
+        id: changelog
+        with:
+          commits: ${{ steps.commit-history.outputs.data }}
+          previousReleaseTagNameOrSha: ${{ steps.current-tag.outputs.tag }}
+          nextReleaseTagName: 'new release'
+          nextReleaseName: 'v1.5.5'
+
+      - name: Print changelog
+        run: echo "${{ steps.changelog.outputs.changelog }}"
 #
 #      - uses: release-drafter/release-drafter@v5
 #        with:
