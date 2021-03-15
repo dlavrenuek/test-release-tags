@@ -28,9 +28,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Checkout specified commit
-        run: git checkout "${{ steps.set-commitish.outputs.commitish }}"
-
       - name: Determinate latest released tag
         id: current-tag
         run: |-
@@ -46,25 +43,12 @@ jobs:
           echo "::set-output name=minor::${BASH_REMATCH[2]}";
           echo "::set-output name=patch::${BASH_REMATCH[3]}";
 
-      - name: Retrieve commit history
-        uses: octokit/request-action@v2.x
-        id: commit-history
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          route: GET /repos/:repository/commits
-          repository: ${{ github.repository }}
-          sha: ${{ steps.current-tag.outputs.tag }}
-          per_page: 500
-
       - name: Generate changelog
-        uses: mrchief/universal-changelog-action@v1.1.3
+        uses: ./actions/generate-changelog
         id: changelog
         with:
-          commits: ${{ steps.commit-history.outputs.data }}
-          previousReleaseTagNameOrSha: ${{ steps.current-tag.outputs.tag }}
-          nextReleaseTagName: 'new release'
-          nextReleaseName: 'v1.5.5'
+          from: ${{ steps.current-tag.outputs.tag }}
+          to: ${{ steps.set-commitish.outputs.commitish }}
 
       - name: Print changelog
         run: echo "${{ steps.changelog.outputs.changelog }}"
