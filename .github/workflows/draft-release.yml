@@ -44,7 +44,7 @@ jobs:
           echo "::set-output name=patch::${BASH_REMATCH[3]}";
 
       - name: Generate changelog
-        uses: ./actions/generate-changelog
+        uses: ./.github/actions/generate-changelog
         id: changelog
         with:
           from: ${{ steps.current-tag.outputs.tag }}
