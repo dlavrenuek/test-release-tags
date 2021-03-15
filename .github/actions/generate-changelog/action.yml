@@ -14,4 +14,4 @@ outputs:
     description: "Changelog in markdown format"
 runs:
   using: "node12"
-  main: "src/index.js"
+  main: "dist/index.js"
