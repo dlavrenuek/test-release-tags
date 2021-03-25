@@ -1,0 +1,18 @@
+{
+  "name": "test-release-tags",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:dlavrenuek/test-release-tags.git",
+  "author": "Dimitri Lavrenük <dimitri.lavr@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@conventional-commits/parser": "^0.4.1",
+    "conventional-changelog-writer": "^5.0.0",
+    "simple-git": "^2.37.0"
+  },
+  "devDependencies": {
+    "@types/conventional-changelog-writer": "^4.0.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
+  }
+}
