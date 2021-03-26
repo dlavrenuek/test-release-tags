@@ -1,0 +1,30 @@
+{
+  "typeLabels": [
+    {
+      "title": "⚡️ Breaking Changes",
+      "types": ["breaking"]
+    },
+    {
+      "title": "🚀 New Features",
+      "types": ["feat"]
+    },
+    {
+      "title": "💊 Bugfixes",
+      "types": ["fix"]
+    }
+  ],
+  "bumpLabels": [
+    {
+      "title": "major",
+      "types": ["breaking"]
+    },
+    {
+      "title": "minor",
+      "types": ["feat"]
+    },
+    {
+      "title": "patch",
+      "types": []
+    }
+  ]
+}
