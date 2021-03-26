@@ -44,14 +44,17 @@ jobs:
           echo "::set-output name=patch::${BASH_REMATCH[3]}";
 
       - name: Generate changelog
-        uses: ./.github/actions/generate-changelog
+        uses: ./.github/actions/generic-conventional-changelog
         id: changelog
         with:
           from: ${{ steps.current-tag.outputs.tag }}
           to: ${{ steps.set-commitish.outputs.commitish }}
 
       - name: Print changelog
-        run: echo "${{ steps.changelog.outputs.changelog }}"
+        run: echo "${{ steps.changelog.outputs.body }}"
+
+      - name: Print bump
+        run: echo "${{ steps.changelog.outputs.bump }}"
 #
 #      - uses: release-drafter/release-drafter@v5
 #        with:
