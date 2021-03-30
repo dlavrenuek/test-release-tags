@@ -1,4 +1,4 @@
-name: Create a draft release with semantic versioning
+name: Draft an onprem release
 
 on:
   workflow_dispatch:
@@ -69,17 +69,17 @@ jobs:
           if [[ -z "${{ github.event.inputs.specific-version }}" ]]; then
             # no specific version is specified
             if [ "${{ steps.changelog.outputs.bump }}" == "major" ]; then
-              major=((${{ steps.current-version.outputs.major }} + 1))
+              major=$((${{ steps.current-version.outputs.major }} + 1))
               minor=0
               patch=0
             elif [ "${{ steps.changelog.outputs.bump }}" == "minor" ]; then
               major=${{ steps.current-version.outputs.major }}
-              minor=((${{ steps.current-version.outputs.minor }} + 1))
+              minor=$((${{ steps.current-version.outputs.minor }} + 1))
               patch=0
             else
               major=${{ steps.current-version.outputs.major }}
               minor=${{ steps.current-version.outputs.minor }}
-              patch=((${{ steps.current-version.outputs.patch }} + 1))
+              patch=$((${{ steps.current-version.outputs.patch }} + 1))
             fi
             echo "::set-output name=tag::v$major.$minor.$patch";
           else
