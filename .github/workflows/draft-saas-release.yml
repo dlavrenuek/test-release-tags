@@ -42,7 +42,7 @@ jobs:
           if [[ -z "${{ github.event.inputs.from }}" ]]; then
             # no specific tag is entered
             branch=${GITHUB_REF#refs/heads/}
-            tag=$( git tag -l --merged "$branch" "v*" --sort=-committerdate | grep -E 'v[0-9]+' | head -n 1 );
+            tag=$( git tag -l --merged "$branch" "v*" --sort=-committerdate | grep -E '^v[0-9]+$' | head -n 1 );
             echo "::set-output name=tag::$tag";
           else
             echo "::set-output name=tag::${{ github.event.inputs.from }}";
