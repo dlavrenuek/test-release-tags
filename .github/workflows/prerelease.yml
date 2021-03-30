@@ -1,4 +1,4 @@
-name: test release format v*
+name: test prerelease
 
 on:
   release:
