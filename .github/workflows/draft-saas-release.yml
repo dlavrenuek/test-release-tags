@@ -61,7 +61,7 @@ jobs:
           if [[ -z "${{ github.event.inputs.specific-version }}" ]]; then
             # no specific version is specified
             [[ "${{ steps.current-tag.outputs.tag }}" =~ ^v([0-9]+)$ ]]
-            echo "::set-output name=tag::$((BASH_REMATCH[1] + 1))";
+            echo "::set-output name=tag::v$((BASH_REMATCH[1] + 1))";
           else
             echo "::set-output name=tag::${{ github.event.inputs.specific-version }}";
           fi
@@ -72,9 +72,9 @@ jobs:
           route: POST /repos/${{ github.repository }}/releases
           draft: true
           prerelease: true
-          name: ${{ steps.next-tag.outputs.tag }}
-          tag_name: ${{ steps.next-tag.outputs.tag }}
-          target_commitish: ${{ steps.set-commitish.outputs.commitish }}
+          name: "${{ steps.next-tag.outputs.tag }}"
+          tag_name: "${{ steps.next-tag.outputs.tag }}"
+          target_commitish: "${{ steps.set-commitish.outputs.commitish }}"
           body: ${{ toJSON(steps.changelog.outputs.body) }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
