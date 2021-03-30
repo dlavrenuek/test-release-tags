@@ -1,0 +1,99 @@
+name: Create a draft release with semantic versioning
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: 'Enter a commit to use (HEAD of the selected branch if empty)'
+        required: false
+        default: ''
+      from:
+        description: 'Look up changes starting from (latest tag if empty)'
+        required: false
+        default: ''
+      specific-version:
+        description: 'Release with a specific version (will be calculated automatically if empty)'
+        required: false
+        default: ''
+
+jobs:
+  create_draft_release:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set commitish
+        id: set-commitish
+        run: |-
+          if [[ -z "${{ github.event.inputs.commit }}" ]]; then
+            # no commit is entered
+            echo "::set-output name=commitish::$GITHUB_SHA";
+          else
+            echo "::set-output name=commitish::${{ github.event.inputs.commit }}";
+          fi
+
+      - name: Determinate latest released tag
+        id: current-tag
+        run: |-
+          if [[ -z "${{ github.event.inputs.from }}" ]]; then
+            # no specific tag is entered
+            branch=${GITHUB_REF#refs/heads/}
+            tag=$( git tag -l --merged "$branch" "v*.*.*" --sort=-committerdate | head -n 1 );
+            echo "::set-output name=tag::$tag";
+          else
+            echo "::set-output name=tag::${{ github.event.inputs.from }}";
+          fi
+
+      - name: Generate changelog
+        uses: dlavrenuek/conventional-changelog-action@v1.0.1
+        id: changelog
+        with:
+          from: ${{ steps.current-tag.outputs.tag }}
+          to: ${{ steps.set-commitish.outputs.commitish }}
+
+      - name: Parse semantic version
+        id: current-version
+        run: |-
+          [[ "${{ steps.current-tag.outputs.tag }}" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)(-[A-Z0-9]+){0,1}$ ]]
+          echo "::set-output name=major::${BASH_REMATCH[1]}";
+          echo "::set-output name=minor::${BASH_REMATCH[2]}";
+          echo "::set-output name=patch::${BASH_REMATCH[3]}";
+
+      - name: Determine next tag
+        id: next-tag
+        run: |-
+          if [[ -z "${{ github.event.inputs.specific-version }}" ]]; then
+            # no specific version is specified
+            if [ "${{ steps.changelog.outputs.bump }}" == "major" ]; then
+              major=((${{ steps.current-version.outputs.major }} + 1))
+              minor=0
+              patch=0
+            elif [ "${{ steps.changelog.outputs.bump }}" == "minor" ]; then
+              major=${{ steps.current-version.outputs.major }}
+              minor=((${{ steps.current-version.outputs.minor }} + 1))
+              patch=0
+            else
+              major=${{ steps.current-version.outputs.major }}
+              minor=${{ steps.current-version.outputs.minor }}
+              patch=((${{ steps.current-version.outputs.patch }} + 1))
+            fi
+            echo "::set-output name=tag::v$major.$minor.$patch";
+          else
+            echo "::set-output name=tag::${{ github.event.inputs.specific-version }}";
+          fi
+
+      - name: Create a release
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/${{ github.repository }}/releases
+          draft: true
+          name: ${{ steps.next-tag.outputs.tag }}
+          tag_name: ${{ steps.next-tag.outputs.tag }}
+          target_commitish: ${{ steps.set-commitish.outputs.commitish }}
+          body: ${{ toJSON(steps.changelog.outputs.body) }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
