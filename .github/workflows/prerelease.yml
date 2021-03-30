@@ -1,0 +1,11 @@
+name: test release format v*
+
+on:
+  release:
+    types: [ prereleased ]
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "prereleased"
