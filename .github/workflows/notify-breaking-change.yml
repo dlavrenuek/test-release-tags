@@ -1,0 +1,14 @@
+name: Send notification about upcoming breaking changes
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+    branches: [master, v*]
+
+jobs:
+  notify-breaking-change:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: print info
+        run: echo "${{ toJson(github.event.pull_request) }}";
