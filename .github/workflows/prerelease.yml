@@ -5,6 +5,11 @@ on:
     types: [ published ]
 
 jobs:
+  print:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print all
+        run: echo "${{ toJson(github.event) }}";
   echo:
     runs-on: ubuntu-latest
     if: github.event.action == 'prereleased'
