@@ -10,8 +10,13 @@ jobs:
     steps:
       - name: print all
         run: echo "${{ toJson(github.event) }}";
-  echo:
+  echo-prerelease:
     runs-on: ubuntu-latest
-    if: github.event.action == 'prereleased'
+    if: github.event.release.prerelease == true
     steps:
       - run: echo "prereleased"
+  echo-release:
+    runs-on: ubuntu-latest
+    if: github.event.release.prerelease == false
+    steps:
+      - run: echo "release"
