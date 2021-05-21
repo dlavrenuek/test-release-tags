@@ -2,10 +2,11 @@ name: test prerelease
 
 on:
   release:
-    types: [ prereleased ]
+    types: [ published ]
 
 jobs:
   echo:
     runs-on: ubuntu-latest
+    if: github.event.action == "prereleased"
     steps:
       - run: echo "prereleased"
