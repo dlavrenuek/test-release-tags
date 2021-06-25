@@ -1,6 +1,8 @@
 on:
   push:
     branches: [master, v*]
+  pull_request:
+    branches: ['**']
 
 env:
   TEST_BRANCH: "v123"
