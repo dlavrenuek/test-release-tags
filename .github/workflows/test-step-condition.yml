@@ -19,5 +19,5 @@ jobs:
           echo "${{ toJson(github.event_name == 'push' && github.ref == steps.test-branch.outputs.ref) }}";
           echo "${{ toJson(github.event) }}";
 
-      - if: github.event_name == 'push' && github.ref == 'refs/heads/${{ env.TEST_BRANCH }}'
+      - if: ${{ github.event_name == 'push' && github.ref == steps.test-branch.outputs.ref }}
         run: echo "RUNS!"
