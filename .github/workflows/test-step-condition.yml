@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |-
-        echo "${{ toJson(github.event_name) }}";
-        echo "${{ toJson(github.event_name == 'push') }}";
-        echo "${{ github.ref }}";
-        echo "${{ toJson(github.event_name == 'push' && github.ref == 'refs/heads/${{ env.TEST_BRANCH }}') }}";
-        echo "${{ toJson(github.event) }}";
+          echo "${{ toJson(github.event_name) }}";
+          echo "${{ toJson(github.event_name == 'push') }}";
+          echo "${{ github.ref }}";
+          echo "${{ toJson(github.event_name == 'push' && github.ref == 'refs/heads/${{ env.TEST_BRANCH }}') }}";
+          echo "${{ toJson(github.event) }}";
 
       - if: github.event_name == 'push' && github.ref == 'refs/heads/${{ env.TEST_BRANCH }}'
         run: echo "RUNS!"
