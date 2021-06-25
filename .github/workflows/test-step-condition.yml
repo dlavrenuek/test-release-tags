@@ -19,7 +19,6 @@ jobs:
           echo "${{ github.ref }}";
           echo "${{ steps.test-branch.outputs.ref }}";
           echo "${{ toJson(github.event_name == 'push' && github.ref == steps.test-branch.outputs.ref) }}";
-          echo "${{ toJson(github.event) }}";
 
       - if: ${{ github.event_name == 'push' && github.ref == steps.test-branch.outputs.ref }}
         run: echo "RUNS!"
