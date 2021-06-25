@@ -9,12 +9,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - id: test-branch
+        run: echo "::set-output name=ref::refs/heads/${{ env.TEST_BRANCH }}";
       - run: |-
           echo "${{ toJson(github.event_name) }}";
           echo "${{ toJson(github.event_name == 'push') }}";
           echo "${{ github.ref }}";
-          echo "${{ toJson('refs/heads/${{ env.TEST_BRANCH }}') }}";
-          echo "${{ toJson(github.event_name == 'push' && github.ref == 'refs/heads/${{ env.TEST_BRANCH }}') }}";
+          echo "${{ steps.test-branch.outputs.ref }}";
+          echo "${{ toJson(github.event_name == 'push' && github.ref == steps.test-branch.outputs.ref) }}";
           echo "${{ toJson(github.event) }}";
 
       - if: github.event_name == 'push' && github.ref == 'refs/heads/${{ env.TEST_BRANCH }}'
