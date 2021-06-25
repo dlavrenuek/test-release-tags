@@ -20,3 +20,4 @@ jobs:
       print_with_condition:
         if: github.event_name == 'push' && github.ref == 'refs/heads/${{ env.TEST_BRANCH }}'
         run: echo "RUNS!"
+
