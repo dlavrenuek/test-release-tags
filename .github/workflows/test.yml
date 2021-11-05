@@ -33,5 +33,5 @@ jobs:
           TEST=""
           echo ${{ steps.changelog.outputs.changelog }}
           echo ${{ toJSON(steps.changelog.outputs.changelog) }}
-          echo ${{ toJSON(TEST) }}
+          echo ${{ toJSON('') }}
           echo "${{ toJSON(steps.changelog.outputs.changelog) }}"
