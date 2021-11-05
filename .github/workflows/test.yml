@@ -30,7 +30,8 @@ jobs:
 
       - name: some tests
         run: |-
+          TEST=""
           echo ${{ steps.changelog.outputs.changelog }}
           echo ${{ toJSON(steps.changelog.outputs.changelog) }}
-          echo ${{ toJSON("") }}
+          echo ${{ toJSON(TEST) }}
           echo "${{ toJSON(steps.changelog.outputs.changelog) }}"
