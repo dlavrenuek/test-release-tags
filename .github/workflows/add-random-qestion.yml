@@ -8,11 +8,11 @@ on:
 jobs:
   add-random-question:
     runs-on: ubuntu-latest
+    if: contains(github.event.issue.title, 'Team Meeting')
     steps:
 
       - name: debug
         run: |
-          echo "comments url:${{ toJson(github.event.issue.comments_url) }}";
-          echo "title:${{ toJson(github.event.issue.title) }}";
-          echo "${{ github.event.issue.title }}";
+          echo ${{ toJson(github.event.issue.comments_url) }};
+          echo ${{ toJson(github.event.issue.title) }};
 
