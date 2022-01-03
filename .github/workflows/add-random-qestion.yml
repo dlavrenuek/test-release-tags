@@ -20,6 +20,6 @@ jobs:
         uses: octokit/request-action@v2.x
         with:
           route: POST ${{ github.event.issue.comments_url }}
-          body: ${{ steps.random.outputs.question }}
+          body: ${{ format('Question of the week:\n{0}', steps.random.outputs.question) }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
