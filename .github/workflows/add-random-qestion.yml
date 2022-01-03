@@ -10,9 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(github.event.issue.title, 'Team Meeting')
     steps:
+      - uses: actions/checkout@v2
 
-      - name: debug
-        run: |
-          echo ${{ toJson(github.event.issue.comments_url) }};
-          echo ${{ toJson(github.event.issue.title) }};
+      - name: Pick random question
+        id: question
+        run: echo "::set-output name=output::$(shuf -n 1 .github/random-questions.txt)";
 
+      - name: Add a comment
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST ${{ github.event.issue.comments_url }}
+          body: ${{ steps.question.output }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
