@@ -11,5 +11,8 @@ jobs:
     steps:
 
       - name: debug
-        run: echo "${{ toJson(github.event) }}"
+        run: |
+          echo "comments url:${{ toJson(github.event.issue.comments_url) }}";
+          echo "title:${{ toJson(github.event.issue.title) }}";
+          echo "${{ github.event.issue.title }}";
 
