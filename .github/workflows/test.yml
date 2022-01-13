@@ -24,5 +24,6 @@ jobs:
       - run: |-
           echo TEST
           echo ${TEST}
+          echo $TEST
         env:
           TEST: hello<>"-
