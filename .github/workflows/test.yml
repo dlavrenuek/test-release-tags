@@ -13,25 +13,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Determinate latest released tag
-        id: current-tag
+      - name: Print some tags
         run: |-
-          # no specific tag is entered
           branch=${GITHUB_REF#refs/heads/}
-          tag=$( git tag -l --merged "$branch" "*" --sort=-committerdate | head -n 1 );
-          echo "::set-output name=tag::$tag";
-
-      - name: Generate changelog
-        uses: dlavrenuek/conventional-changelog-action@v1.0.1
-        id: changelog
-        with:
-          from: ${{ steps.current-tag.outputs.tag }}
-          to: ${{ steps.set-commitish.outputs.commitish }}
-
-      - name: some tests
-        run: |-
-          TEST=""
-          echo ${{ steps.changelog.outputs.changelog }}
-          echo ${{ toJSON(steps.changelog.outputs.changelog) }}
-          echo ${{ toJSON('') }}
-          echo "${{ toJSON(steps.changelog.outputs.changelog) }}"
+          git tag -l --merged "$branch" "*" --sort=-committerdate | grep -E "^[0-9]+.[0-9]+.[0-9]+$"
