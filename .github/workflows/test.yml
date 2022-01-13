@@ -17,6 +17,6 @@ jobs:
         run: |-
           branch=${GITHUB_REF#refs/heads/}
           echo "all"
-          git tag -l --merged "$branch" "*" --sort=-committerdate | grep -E "^[0-9]+.[0-9]+.[0-9]+$"
+          git tag -l --merged "$branch" "*" --sort=-committerdate
           echo "filtered"
           git tag -l --merged "$branch" "*" --sort=-committerdate | grep -E "^[0-9]+.[0-9]+.[0-9]+$"
