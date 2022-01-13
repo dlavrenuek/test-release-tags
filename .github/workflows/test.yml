@@ -20,3 +20,9 @@ jobs:
           git tag -l --merged "$branch" "*" --sort=-committerdate
           echo "filtered"
           git tag -l --merged "$branch" "*" --sort=-committerdate | grep -E "^[0-9]+.[0-9]+.[0-9]+$"
+
+      - run: |-
+          echo TEST
+          echo ${TEST}
+        env:
+          TEST: hello<>"-
