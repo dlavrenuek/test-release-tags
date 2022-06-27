@@ -4,3 +4,4 @@ some other change
 test1
 
 test2
+test3
