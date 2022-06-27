@@ -1,0 +1,39 @@
+name: Backport labeled merged pull requests
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  build:
+    name: Create backport PRs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # so it can comment
+      pull-requests: write # so it can create pull requests
+    # Don't run on closed unmerged pull requests
+    if: github.event.pull_request.merged
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create backport PRs
+        uses: zeebe-io/backport-action@v0.0.7
+        with:
+          # Required
+          # Token to authenticate requests to GitHub
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Required
+          # Working directory for the backport action
+          github_workspace: ${{ github.workspace }}
+
+          # Optional
+          # Regex pattern to match github labels
+          # Must contain a capture group for the target branch
+          # label_pattern: ^backport ([^ ]+)$
+
+          # Optional
+          # Template used as description in the pull requests created by this action.
+          # Placeholders can be used to define variable values.
+          # These are indicated by a dollar sign and curly braces (`${placeholder}`).
+          # Please refer to this action's README for all available placeholders.
+          # pull_description: |-
+          #   # Description
+          #   Backport of #${pull_number} to `${target_branch}`.
