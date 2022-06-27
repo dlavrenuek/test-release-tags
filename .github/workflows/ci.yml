@@ -1,22 +1,8 @@
 name: development
 
 on:
-  push:
-    branches: [master, v*]
   pull_request:
     branches: ['**']
-    paths:
-      - 'backend/**'
-      - 'frontend/**'
-      - 'router/**'
-      - 'test-client/**'
-      - 'utility/**'
-      # changes that might affect CI
-      - '.github/**'
-      - 'e2e/**'
-      - 'docker-compose.*.yml'
-      - '.env.*'
-      - 'Makefile'
 
 jobs:
   print:
