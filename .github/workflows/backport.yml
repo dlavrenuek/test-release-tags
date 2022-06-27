@@ -1,39 +1,26 @@
-name: Backport labeled merged pull requests
+name: Backport
 on:
-  pull_request:
-    types: [closed]
+  pull_request_target:
+    types:
+      - closed
+      - labeled
+
 jobs:
-  build:
-    name: Create backport PRs
+  backport:
+    name: Backport
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # so it can comment
-      pull-requests: write # so it can create pull requests
-    # Don't run on closed unmerged pull requests
-    if: github.event.pull_request.merged
+    # Only react to merged PRs for security reasons.
+    # See https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request_target.
+    if: >
+      github.event.pull_request.merged
+      && (
+        github.event.action == 'closed'
+        || (
+          github.event.action == 'labeled'
+          && contains(github.event.label.name, 'backport')
+        )
+      )
     steps:
-      - uses: actions/checkout@v2
-      - name: Create backport PRs
-        uses: zeebe-io/backport-action@v0.0.8
+      - uses: tibdex/backport@v2
         with:
-          # Required
-          # Token to authenticate requests to GitHub
           github_token: ${{ secrets.GITHUB_TOKEN }}
-
-          # Required
-          # Working directory for the backport action
-          github_workspace: ${{ github.workspace }}
-
-          # Optional
-          # Regex pattern to match github labels
-          # Must contain a capture group for the target branch
-          # label_pattern: ^backport ([^ ]+)$
-
-          # Optional
-          # Template used as description in the pull requests created by this action.
-          # Placeholders can be used to define variable values.
-          # These are indicated by a dollar sign and curly braces (`${placeholder}`).
-          # Please refer to this action's README for all available placeholders.
-          # pull_description: |-
-          #   # Description
-          #   Backport of #${pull_number} to `${target_branch}`.
