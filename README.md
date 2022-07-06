@@ -1,6 +1,6 @@
 # test-release-tags
 
-some other change
+some other changed
 test1
 
 test2
