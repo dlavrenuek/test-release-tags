@@ -84,3 +84,5 @@ jobs:
           from: ${{ steps.current-tag.outputs.tag }}
           to: ${{ steps.set-commitish.outputs.commitish }}
           labels: ${{ steps.next-tag.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
