@@ -83,6 +83,7 @@ jobs:
         with:
           from: ${{ steps.current-tag.outputs.tag }}
           to: ${{ steps.set-commitish.outputs.commitish }}
-          labels: ${{ steps.next-tag.outputs.tag }}
+          labels: "release:${{ steps.next-tag.outputs.tag }}"
+          color: FFD334
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
