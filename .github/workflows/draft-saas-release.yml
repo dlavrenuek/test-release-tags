@@ -78,3 +78,9 @@ jobs:
           body: ${{ toJSON(steps.changelog.outputs.body) }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: dlavrenuek/add-commit-labels@v1.0.0
+        with:
+          from: ${{ steps.current-tag.outputs.tag }}
+          to: ${{ steps.set-commitish.outputs.commitish }}
+          labels: ${{ steps.next-tag.outputs.tag }}
