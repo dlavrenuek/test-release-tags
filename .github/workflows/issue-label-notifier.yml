@@ -5,7 +5,7 @@ on:
 jobs:
   notify:
     runs-on: ubuntu-latest
-    if: ${{ contains(github.event.issues.*.name, 'bug') && startsWith(github.event.label.name, 'test') }}
+    if: ${{ contains(github.event.issue.labels.*.name, 'bug') && startsWith(github.event.label.name, 'test') }}
     steps:
       - name: Add a comment
         uses: octokit/request-action@v2.x
