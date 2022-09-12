@@ -11,6 +11,6 @@ jobs:
         uses: octokit/request-action@v2.x
         with:
           route: POST ${{ github.event.issue.comments_url }}
-          body: "${{ format('@{0} the issue was fixed and released in {1}', github.event.issue.user.login, github.event.label.name) }}"
+          body: ${{ format('Hi @{0} :wave:, the issue was fixed and released in {1}', github.event.issue.user.login, github.event.label.name) }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
