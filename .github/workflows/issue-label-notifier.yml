@@ -1,0 +1,10 @@
+name: Notify on label
+on:
+  issues:
+    types: [labeled]
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ github.issue.labels }}"
+      - run: echo "${{ github.label }}"
