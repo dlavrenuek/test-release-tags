@@ -5,22 +5,12 @@ on:
 jobs:
   notify:
     runs-on: ubuntu-latest
-    # if: ${{ contains(github.event.issue.*.name, 'bug') && startsWith(github.event.label.name, 'test') }}
+    if: ${{ contains(github.event.issues.*.name, 'bug') && startsWith(github.event.label.name, 'test') }}
     steps:
-      - name: if has bug
-        if: contains(github.event.issue.*.name, 'bug')
-        run: echo "has a label bug"
-      - name: if new label has "test"
-        if: startsWith(github.event.label.name, 'test')
-        run: echo "has a label bug"
-
-      - name: echo label
-        run: echo "${{ github.event.label.name }}"
-
       - name: Add a comment
         uses: octokit/request-action@v2.x
         with:
           route: POST ${{ github.event.issue.comments_url }}
-          body: ${{ format('@{0} the issue was fixed and released in "{1}"', github.event.issue.user.login, github.event.label.name) }}
+          body: "${{ format('@{0} the issue was fixed and released in {1}', github.event.issue.user.login, github.event.label.name) }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
